@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Hangry</string>
+    <string name="meals_button_label">Meals</string>
+    <string name="recipes_button_label">Recipes</string>
+    <string name="groceries_button_label">Groceries</string>
+    <string name="add_button_label">Add</string>
+    <string name="title_activity_groceries">GroceriesActivity</string>
+</resources>
