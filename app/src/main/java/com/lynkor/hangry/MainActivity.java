@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         //Set OnClickListeners for each ImageButton
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 btnDismiss.setOnClickListener(new Button.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
                         //Undim main activity
                         layout_main.getForeground().setAlpha(0);
                         popupWindow.dismiss();

@@ -5,4 +5,5 @@
     <string name="groceries_button_label">Groceries</string>
     <string name="add_button_label">Add</string>
     <string name="title_activity_groceries">GroceriesActivity</string>
+    <string name="add_recipe_hint">Recipe Name</string>
 </resources>
