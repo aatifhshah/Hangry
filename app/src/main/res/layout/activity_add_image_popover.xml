@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <EditText
+        android:id="@+id/image_url"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="25dp"
+        android:hint="@string/recipe_image_hint"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/local_file_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="5"/>
+
+</LinearLayout>

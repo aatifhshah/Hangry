@@ -21,7 +21,8 @@
             android:name=".GroceriesActivity"
             android:label="@string/title_activity_groceries"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddActivity" />
+        <activity android:name=".AddActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".BannerPopup"></activity>
     </application>
 

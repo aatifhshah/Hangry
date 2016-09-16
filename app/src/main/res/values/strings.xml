@@ -6,4 +6,9 @@
     <string name="add_button_label">Add</string>
     <string name="title_activity_groceries">GroceriesActivity</string>
     <string name="add_recipe_hint">Recipe Name</string>
+    <string name="choose_ingredient_name">Choose Ingredient</string>
+    <string name="choose_quantity">Qty</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="add_step">Add Step</string>
+    <string name="recipe_image_hint">Enter Image URL</string>
 </resources>
