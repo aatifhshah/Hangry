@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ingredients_array">
-        <item>New Ingredient</item>
+        <item>oz</item>
+        <item>pieces</item>
+        <item>litres</item>
+        <item>lbs</item>
+        <item>cups</item>
+        <item>tbsp</item>
+        <item>quarts</item>
+        <item>tsp</item>
+        <item>cloves</item>
     </string-array>
 </resources>

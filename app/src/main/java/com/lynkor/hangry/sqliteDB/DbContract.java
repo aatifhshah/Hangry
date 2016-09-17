@@ -13,12 +13,13 @@ public final class DbContract {
     public static final String INTEGER_TYPE = " INTEGER";
     public static final String DOUBLE_TYPE = " REAL";
     public static final String COMMA_SEP = ",";
+    public static final String SEMICOLON_SEP = ";";
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + IngredientsEntry.TABLE_INGREDIENTS + " (" +
                     IngredientsEntry._ID + INTEGER_PRIMARY_KEY +
                     IngredientsEntry.COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
                     IngredientsEntry.COLUMN_UNIT + TEXT_TYPE +
-                    " )"
+                    " ); "
             +
             "CREATE TABLE " + RecipesEntry.TABLE_RECIPES + " (" +
                     RecipesEntry._ID + INTEGER_PRIMARY_KEY +
@@ -30,7 +31,7 @@ public final class DbContract {
                     " )";
 
     public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + IngredientsEntry.TABLE_INGREDIENTS +
+            "DROP TABLE IF EXISTS " + IngredientsEntry.TABLE_INGREDIENTS + "; " +
             "DROP TABLE IF EXISTS " + RecipesEntry.TABLE_RECIPES;
 
     public static final String SELECT_COLUMN_NAME_FROM_INGREDIENTS =
@@ -56,6 +57,12 @@ public final class DbContract {
                     + " * "
                     + "FROM "
                     + RecipesEntry.TABLE_RECIPES;
+    public static final String SELECT_ROW_FROM_INGREDIENTS =
+            "SELECT "
+                    + IngredientsEntry._ID
+                    + " FROM  "
+                    + IngredientsEntry.TABLE_INGREDIENTS
+                    + " WHERE _id=?";
 
 
     public DbContract(){}
@@ -65,6 +72,8 @@ public final class DbContract {
         public static final String ID = "_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_UNIT = "unit";
+        public static final String spinner_hint = "Ingredient";
+        public static final String new_ingredient = "Add New Ingredient";
     }
 
     public static abstract class RecipesEntry implements BaseColumns {

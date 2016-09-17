@@ -6,16 +6,20 @@
 
     <EditText
         android:id="@+id/image_url"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingLeft="25dp"
         android:hint="@string/recipe_image_hint"
-        android:layout_weight="1"/>
-
-    <Button
-        android:id="@+id/local_file_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_weight="5"/>
+
+    <ImageButton
+        android:id="@+id/local_file_button"
+        android:src="@drawable/files"
+        android:scaleType="fitCenter"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
 </LinearLayout>
