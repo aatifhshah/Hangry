@@ -10,84 +10,84 @@
     >
 
 
-        <!--Recipe Image-->
-        <ImageButton
-            android:id="@+id/recipe_image"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:layout_height="0dp"
-            android:padding="15dp"
-            android:background="@color/transparent"
-            android:src="@drawable/default_recipe_img"
-            android:scaleType="fitCenter"
-            android:layout_weight="5"/>
+    <!--Recipe Image-->
+    <ImageButton
+        android:id="@+id/recipe_image"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:padding="15dp"
+        android:background="@color/transparent"
+        android:src="@drawable/default_recipe_img"
+        android:scaleType="fitCenter"
+        android:layout_weight="5"/>
 
 
-        <!--Recipe Title-->
-        <EditText
-            android:id="@+id/recipe_name"
-            android:hint="@string/add_recipe_hint"
-            android:gravity="center"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"/>
+    <!--Recipe Title-->
+    <EditText
+        android:id="@+id/recipe_name"
+        android:hint="@string/add_recipe_hint"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"/>
 
-        <!--Ingredients List-->
-        <ListView
-            android:id="@+id/ingredients_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3">
-        </ListView>
+    <!--Ingredients List-->
+    <ListView
+        android:id="@+id/ingredients_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+    </ListView>
 
-        <!--Add New Ingredient Button-->
-        <Button
-            android:id="@+id/add_ingredient"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/add_ingredient"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="2dp"
-            android:textColor="@color/orange"
-            android:background="?android:attr/selectableItemBackground"
-            />
+    <!--Add New Ingredient Button-->
+    <Button
+        android:id="@+id/add_ingredient"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/add_ingredient"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/orange"
+        android:background="?android:attr/selectableItemBackground"
+        />
 
-        <!--Recipe Steps-->
-        <ListView
-            android:id="@+id/steps_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3">
-        </ListView>
+    <!--Recipe Steps-->
+    <ListView
+        android:id="@+id/steps_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+    </ListView>
 
-        <!--Add New Step Button-->
-        <Button
-            android:id="@+id/add_step"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/add_step"
-            android:textColor="@color/orange"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="8dp"
-            android:background="?android:attr/selectableItemBackground"
-            />
+    <!--Add New Step Button-->
+    <Button
+        android:id="@+id/add_step"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/add_step"
+        android:textColor="@color/orange"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        />
 
-        <!--Add Ingredient: Button that opens popover? end with toast "Ingredient added!"-->
-        <ImageButton
-            android:id="@+id/add_recipe"
-            android:layout_width="match_parent"
-            android:padding="13dp"
-            android:layout_margin="0dp"
-            android:layout_height="53dp"
-            android:src="@drawable/check"
-            android:scaleType="fitCenter"
-            android:background="@color/orange"
-            android:layout_gravity="center_horizontal" />
+    <!--Add Ingredient: Button that opens popover? end with toast "Ingredient added!"-->
+    <ImageButton
+        android:id="@+id/add_recipe"
+        android:layout_width="match_parent"
+        android:padding="13dp"
+        android:layout_margin="0dp"
+        android:layout_height="53dp"
+        android:src="@drawable/check"
+        android:scaleType="fitCenter"
+        android:background="@color/orange"
+        android:layout_gravity="center_horizontal" />
 
 
 

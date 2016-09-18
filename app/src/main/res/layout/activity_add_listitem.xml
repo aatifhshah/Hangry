@@ -35,7 +35,9 @@
             android:padding="6dp"
             android:background="@android:color/transparent"
             android:layout_weight="1.5"
-            android:hint="@string/enter_quantity">
+            android:hint="@string/enter_quantity"
+            android:inputType="number"
+            >
         </EditText>
 
         <TextView
