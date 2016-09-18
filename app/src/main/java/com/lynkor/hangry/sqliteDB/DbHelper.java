@@ -17,7 +17,7 @@ public class DbHelper extends SQLiteOpenHelper{
     private static final String DEBUG_TAG = "DbHelper";
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "inventory_data";
-    private final String DB_SCHEMA = DbContract.SQL_CREATE_ENTRIES;
+    private final String[] DB_SCHEMA = DbContract.SQL_CREATE_ENTRIES;
 
     private DbHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -36,7 +36,9 @@ public class DbHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DB_SCHEMA);
+        for(String statement : DB_SCHEMA){
+            sqLiteDatabase.execSQL(statement);
+        }
         Log.v(DEBUG_TAG, sqLiteDatabase.toString());
     }
 

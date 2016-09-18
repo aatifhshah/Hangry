@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -47,12 +50,11 @@ public class AddActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private static final int SELECT_PICTURE = 1;
     private String selectedImagePath;
-    private Cursor ingredientsCursor;
     Cursor spinnerCursor;
     SimpleCursorAdapter spinnerAdapter;
-    private Spinner[] ingredients;
-    private EditText[] quantity;
-    private EditText[] steps;
+    boolean added;
+
+
 
 
     @Override
@@ -61,9 +63,7 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
         stepsList = new ArrayList<>();
         recipeIngredients = new ArrayList<>();
-        ingredients = new Spinner[10];
-        steps = new EditText[10];
-        quantity = new EditText[10];
+
 
         /*Load Cursor*/
 
@@ -77,6 +77,7 @@ public class AddActivity extends AppCompatActivity {
          /*Attach List adapters to views*/
 
         //Find ListView and set adapter for Ingredients
+        checkCursor();
         ingredientsListView = (ListView) findViewById(R.id.ingredients_list);
         //Add hint to spinner list
         ingredientsAdapter = new ListAdapter(this, recipeIngredients, R.layout.activity_add_listitem, "ingredients");
@@ -154,14 +155,22 @@ public class AddActivity extends AppCompatActivity {
         });
 
         //add recipe
-        ImageButton addRecipe = (ImageButton) findViewById(R.id.add_recipe);
+        final ImageButton addRecipe = (ImageButton) findViewById(R.id.add_recipe);
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logRecipe();
+                added = postRecipe();
+                finish();
             }
         });
 
+    }
+
+    @Override
+    protected void onStop(){
+        if(added)
+            Toast.makeText(AddActivity.this, "Recipe added!", Toast.LENGTH_SHORT).show();
+        super.onStop();
     }
 
     private void addNew(String name, String unit) {
@@ -170,6 +179,7 @@ public class AddActivity extends AppCompatActivity {
         entry.put(DbContract.IngredientsEntry.COLUMN_UNIT, unit);
 
         db.insert(DbContract.IngredientsEntry.TABLE_INGREDIENTS, null, entry);
+
     }
 
 
@@ -229,19 +239,73 @@ public class AddActivity extends AppCompatActivity {
         String name = recipeName.getText().toString();
         Log.v(TAG, "RECIPE NAME: " + name);
         Log.v(TAG, "RECIPE INGREDIENTS: \n");
-        for (int i = 0; i < ingredients.length; i++) {
-            if (ingredients[i] != null) {
-                //String testCursro = ;
-                Log.v("      ingredient: ", ((Cursor) ingredients[i].getSelectedItem()).getString(1) + ":" + quantity[i].getText().toString() + ":" + ((Cursor) ingredients[i].getSelectedItem()).getString(2));
-            }
-        }
-        Log.v(TAG, "RECIPE STEPS: \n");
-        for (EditText i : steps) {
-            if (i != null)
-                Log.v("      step:       ", i.getText().toString() + "");
-        }
+
 
     }
+
+    public boolean postRecipe(){
+        boolean recipeAdded = false;
+
+        String recipe_image = selectedImagePath;
+        String recipe_name = ((EditText) this.findViewById(R.id.recipe_name)).getText().toString();
+
+        ArrayList<ContentValues> groceries = new ArrayList<>();
+        ContentValues recipe = new ContentValues();
+
+        //build ingredients qty unit string for recipe. *FORMAT name:qty:unit&..
+        String recipe_ingredients = "";
+
+        //build Recipe Steps. *FORMAT step:step:..
+        String recipe_steps = "";
+
+
+
+        for(int i=0; i<ingredientsAdapter._quantity.size(); i++ ){
+            String name = ingredientsAdapter._spinner_value.get(i);
+            String quantity = ingredientsAdapter._quantity.get(i);
+            String unit = ingredientsAdapter._unit_type.get(i);
+            String step = stepsAdapter.savedStepText.get(i);
+
+            if(!(name.equals(DbContract.IngredientsEntry.spinner_hint) || name.equals(DbContract.IngredientsEntry.new_ingredient)) && quantity.length()>0){
+                ContentValues grocery = new ContentValues();
+                grocery.put(DbContract.GroceriesEntry.COLUMN_NAME, name);
+                grocery.put(DbContract.GroceriesEntry.COLUMN_QUANTITY, quantity);
+                grocery.put(DbContract.GroceriesEntry.COLUMN_UNIT, unit);
+                groceries.add(grocery);
+
+                recipe_ingredients += name+":"+quantity+":"+unit+"&";
+            }
+
+            if(step != null)
+                recipe_steps += step+":";
+
+        }
+
+
+        if( recipe_name!=null && recipe_ingredients!=null && recipe_steps!=null && groceries.size()>0){
+            recipe.put(DbContract.RecipesEntry.COLUMN_NAME, recipe_name);
+            recipe.put(DbContract.RecipesEntry.COLUMN_IMAGE, recipe_image);
+            recipe.put(DbContract.RecipesEntry.COLUMN_INGREDIENTS, recipe_ingredients.substring(0,recipe_ingredients.length()-1));
+            recipe.put(DbContract.RecipesEntry.COLUMN_STEPS, recipe_steps.substring(0,recipe_steps.length()-1));
+            recipe.put(DbContract.RecipesEntry.COLUMN_QUANTITY, "0");
+
+            //post to db
+            db.insertOrThrow(DbContract.RecipesEntry.TABLE_RECIPES, null, recipe);
+            //groceries
+            for(ContentValues i : groceries){
+                db.insertOrThrow(DbContract.GroceriesEntry.TABLE_GROCERIES, null, i);
+            }
+            recipeAdded = true;
+            //recipe
+
+        } else {
+            Toast.makeText(this, "Incomplete Recipe", Toast.LENGTH_SHORT).show();
+        }
+
+        return recipeAdded;
+    }
+
+
 
 
     @Override
@@ -272,9 +336,10 @@ public class AddActivity extends AppCompatActivity {
         private boolean isStepList;
         private String type = "";
         public HashMap<Integer, String> savedStepText = new HashMap<>();
-        public HashMap<Integer, Integer> save_spinner_position = new HashMap<>();
-        public HashMap<Integer, String>  save_unit_type = new HashMap<>();
-        public HashMap<Integer, String> save_quantity = new HashMap<>();
+        public HashMap<Integer, Integer> _spinner_position = new HashMap<>();
+        public HashMap<Integer, String> _spinner_value = new HashMap<>();
+        public HashMap<Integer, String>  _unit_type = new HashMap<>();
+        public HashMap<Integer, String> _quantity = new HashMap<>();
 
 
 
@@ -291,10 +356,11 @@ public class AddActivity extends AppCompatActivity {
 
             // initialize myList
             for (int i = 0; i < 10; i++) {
-                savedStepText.put(i, "");
-                save_spinner_position.put(i, 1);
-                save_unit_type.put(i, "");
-                save_quantity.put(i, "");
+                savedStepText.put(1, "");
+                _spinner_position.put(i, 1);
+                _spinner_value.put(i, "");
+                _unit_type.put(i, "");
+                _quantity.put(i, "");
             }
 
         }
@@ -333,7 +399,6 @@ public class AddActivity extends AppCompatActivity {
                 final EditText qty = (EditText) row.findViewById(R.id.enter_quantity);
                 final TextView unitType = (TextView) row.findViewById(R.id.ingredient_unit);
                 final Spinner spinner = (Spinner) row.findViewById(R.id.choose_ingredient);
-
 
                 checkCursor();
                 String[] adapterCols = new String[]{"name"};
@@ -390,15 +455,15 @@ public class AddActivity extends AppCompatActivity {
 
                             Spinner objSpinner = (Spinner) row.findViewById(R.id.choose_ingredient);
                             unitType.setText(getUnitType((int) id));
-                            save_unit_type.put(position, getUnitType((int) id));
-                            ingredients[position] = objSpinner;
-                            quantity[position] = (EditText) row.findViewById(R.id.enter_quantity);
+                            _unit_type.put(position, getUnitType((int) id));
+
 
 
                         }
 
                         Log.v(DEBUG_TAG, "selected spinner"+String.valueOf(spinner.getSelectedItemId()));
-                        save_spinner_position.put(position, (int) spinner.getSelectedItemId());
+                        _spinner_position.put(position, (int) spinner.getSelectedItemId());
+                        _spinner_value.put(position, ((Cursor)spinner.getSelectedItem()).getString(1));
 
 
                     }
@@ -427,7 +492,7 @@ public class AddActivity extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        save_quantity.put(position, s.toString().trim());
+                        _quantity.put(position, s.toString().trim());
                     }
                 });
 
@@ -435,9 +500,9 @@ public class AddActivity extends AppCompatActivity {
 
 
                // spinner.setSelection(current.getSpinnerPosition());
-                spinner.setSelection(save_spinner_position.get(position) - 1);
-                qty.setText(save_quantity.get(position));
-                unitType.setText(save_unit_type.get(position));
+                spinner.setSelection(_spinner_position.get(position) - 1);
+                qty.setText(_quantity.get(position));
+                unitType.setText(_unit_type.get(position));
 
 
 
@@ -452,8 +517,7 @@ public class AddActivity extends AppCompatActivity {
                 EditText step = (EditText) row.findViewById(R.id.step_description);
                 //Numbered bullet points
                 ingredient_position.setText(String.valueOf(position + 1) + ".");
-                //Add Edittext ? maybe should remove xD
-                steps[position] = step;
+
                 //Set Character limit
                 step.setFilters(new InputFilter[]{new InputFilter.LengthFilter(250 / values.size())});
 

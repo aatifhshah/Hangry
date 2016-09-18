@@ -28,6 +28,7 @@
         android:id="@+id/recipe_name"
         android:hint="@string/add_recipe_hint"
         android:gravity="center"
+        android:inputType="textCapWords"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="0dp"

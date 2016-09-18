@@ -22,7 +22,7 @@
                 android:id="@+id/new_ingredient_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
+                android:inputType="textCapWords"
                 android:hint="Name"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -37,7 +37,7 @@
                 android:id="@+id/new_ingredient_unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
+                android:inputType="textCapWords"
                 android:hint="Unit"/>
 
         </android.support.design.widget.TextInputLayout>
