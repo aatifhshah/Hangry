@@ -10,5 +10,7 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="add_step">Add Step</string>
     <string name="recipe_image_hint">Enter Image URL</string>
+    <string name="decrement_quantity">&#8211;</string>
+    <string name="increment_quantity">+</string>
 
 </resources>

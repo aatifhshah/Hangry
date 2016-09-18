@@ -43,15 +43,15 @@ public class AddActivity extends AppCompatActivity {
 
     private ListView ingredientsListView;
     private ListView stepsListView;
-    ListAdapter ingredientsAdapter;
-    ListAdapter stepsAdapter;
+    private ListAdapter ingredientsAdapter;
+    private ListAdapter stepsAdapter;
     private ArrayList<String> recipeIngredients;
     private ArrayList<String> stepsList;
     private SQLiteDatabase db;
     private static final int SELECT_PICTURE = 1;
     private String selectedImagePath;
-    Cursor spinnerCursor;
-    SimpleCursorAdapter spinnerAdapter;
+    private Cursor spinnerCursor;
+    private SimpleCursorAdapter spinnerAdapter;
     boolean added;
 
 
@@ -71,13 +71,13 @@ public class AddActivity extends AppCompatActivity {
         DbHelper handler = DbHelper.getInstance(this);
         //Get access to the underlying writable database
         db = handler.getWritableDatabase();
+        checkCursor();
 
 
 
          /*Attach List adapters to views*/
 
         //Find ListView and set adapter for Ingredients
-        checkCursor();
         ingredientsListView = (ListView) findViewById(R.id.ingredients_list);
         //Add hint to spinner list
         ingredientsAdapter = new ListAdapter(this, recipeIngredients, R.layout.activity_add_listitem, "ingredients");
@@ -249,7 +249,7 @@ public class AddActivity extends AppCompatActivity {
         String recipe_image = selectedImagePath;
         String recipe_name = ((EditText) this.findViewById(R.id.recipe_name)).getText().toString();
 
-        ArrayList<ContentValues> groceries = new ArrayList<>();
+        //ArrayList<ContentValues> groceries = new ArrayList<>();
         ContentValues recipe = new ContentValues();
 
         //build ingredients qty unit string for recipe. *FORMAT name:qty:unit&..
@@ -267,11 +267,11 @@ public class AddActivity extends AppCompatActivity {
             String step = stepsAdapter.savedStepText.get(i);
 
             if(!(name.equals(DbContract.IngredientsEntry.spinner_hint) || name.equals(DbContract.IngredientsEntry.new_ingredient)) && quantity.length()>0){
-                ContentValues grocery = new ContentValues();
+                /*ContentValues grocery = new ContentValues();
                 grocery.put(DbContract.GroceriesEntry.COLUMN_NAME, name);
                 grocery.put(DbContract.GroceriesEntry.COLUMN_QUANTITY, quantity);
                 grocery.put(DbContract.GroceriesEntry.COLUMN_UNIT, unit);
-                groceries.add(grocery);
+                groceries.add(grocery);*/
 
                 recipe_ingredients += name+":"+quantity+":"+unit+"&";
             }
@@ -282,7 +282,7 @@ public class AddActivity extends AppCompatActivity {
         }
 
 
-        if( recipe_name!=null && recipe_ingredients!=null && recipe_steps!=null && groceries.size()>0){
+        if( recipe_name!=null && recipe_ingredients!=null && recipe_steps!=null){
             recipe.put(DbContract.RecipesEntry.COLUMN_NAME, recipe_name);
             recipe.put(DbContract.RecipesEntry.COLUMN_IMAGE, recipe_image);
             recipe.put(DbContract.RecipesEntry.COLUMN_INGREDIENTS, recipe_ingredients.substring(0,recipe_ingredients.length()-1));
@@ -292,9 +292,9 @@ public class AddActivity extends AppCompatActivity {
             //post to db
             db.insertOrThrow(DbContract.RecipesEntry.TABLE_RECIPES, null, recipe);
             //groceries
-            for(ContentValues i : groceries){
+            /*for(ContentValues i : groceries){
                 db.insertOrThrow(DbContract.GroceriesEntry.TABLE_GROCERIES, null, i);
-            }
+            }*/
             recipeAdded = true;
             //recipe
 

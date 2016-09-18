@@ -71,6 +71,15 @@ public final class DbContract {
                     + " * "
                     + "FROM "
                     + RecipesEntry.TABLE_RECIPES;
+
+
+    public static final String SELECT_ALL_FROM_GROCERIES =
+            "SELECT"
+                    + " * "
+                    + "FROM "
+                    + GroceriesEntry.TABLE_GROCERIES;
+
+
     public static final String SELECT_ROW_FROM_INGREDIENTS =
             "SELECT "
                     + IngredientsEntry._ID
