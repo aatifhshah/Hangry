@@ -27,14 +27,14 @@ public final class DbContract {
                     RecipesEntry.COLUMN_IMAGE + TEXT_TYPE + COMMA_SEP +
                     RecipesEntry.COLUMN_INGREDIENTS + TEXT_TYPE + COMMA_SEP +
                     RecipesEntry.COLUMN_STEPS + TEXT_TYPE + COMMA_SEP +
-                    RecipesEntry.COLUMN_QUANTITY + TEXT_TYPE +
+                    RecipesEntry.COLUMN_QUANTITY + INTEGER_TYPE +
                     " )"
             ,
             "CREATE TABLE " + GroceriesEntry.TABLE_GROCERIES + " (" +
                     GroceriesEntry._ID + INTEGER_PRIMARY_KEY +
                     GroceriesEntry.COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
                     GroceriesEntry.COLUMN_UNIT + TEXT_TYPE + COMMA_SEP +
-                    GroceriesEntry.COLUMN_QUANTITY + TEXT_TYPE +
+                    GroceriesEntry.COLUMN_QUANTITY + INTEGER_TYPE +
                     " )"
     };
 
@@ -86,6 +86,18 @@ public final class DbContract {
                     + " FROM  "
                     + IngredientsEntry.TABLE_INGREDIENTS
                     + " WHERE _id=?";
+
+
+    public static final String INCREMENT_GROCERY_QUANTITY =
+            "UPDATE "
+                    + GroceriesEntry.TABLE_GROCERIES
+                    + " SET quantity = quantity + 1 WHERE _id = ";
+
+
+    public static final String DECREMENT_GROCERY_QUANTITY =
+            "UPDATE "
+                    + GroceriesEntry.TABLE_GROCERIES
+                    + " SET quantity = quantity - 1 WHERE _id = ";
 
 
     public DbContract() {

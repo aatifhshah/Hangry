@@ -282,7 +282,7 @@ public class AddActivity extends AppCompatActivity {
         }
 
 
-        if( recipe_name!=null && recipe_ingredients!=null && recipe_steps!=null){
+        if( !recipe_name.equals("") && !recipe_ingredients.equals("") && !recipe_steps.equals("")){
             recipe.put(DbContract.RecipesEntry.COLUMN_NAME, recipe_name);
             recipe.put(DbContract.RecipesEntry.COLUMN_IMAGE, recipe_image);
             recipe.put(DbContract.RecipesEntry.COLUMN_INGREDIENTS, recipe_ingredients.substring(0,recipe_ingredients.length()-1));
@@ -461,7 +461,6 @@ public class AddActivity extends AppCompatActivity {
 
                         }
 
-                        Log.v(DEBUG_TAG, "selected spinner"+String.valueOf(spinner.getSelectedItemId()));
                         _spinner_position.put(position, (int) spinner.getSelectedItemId());
                         _spinner_value.put(position, ((Cursor)spinner.getSelectedItem()).getString(1));
 

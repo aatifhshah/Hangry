@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"/>
 
     <ImageButton
-        android:id="@+id/add_recipe"
+        android:id="@+id/close_groceries"
         android:layout_width="match_parent"
         android:padding="13dp"
         android:layout_margin="0dp"

@@ -24,6 +24,7 @@
                 android:textSize="27sp"
                 android:textColor="@color/orange"
                 android:background="?android:attr/selectableItemBackground"
+                android:onClick=""
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
@@ -40,6 +41,7 @@
                 android:textColor="@color/orange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="decrement"
                 android:background="?android:attr/selectableItemBackground"
                 android:gravity="center_horizontal" />
         </RelativeLayout>
@@ -60,6 +62,7 @@
         <TextView
             android:id="@+id/grocery_name"
             android:layout_weight="4"
+            android:text="test"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
