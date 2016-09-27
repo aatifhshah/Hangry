@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +104,13 @@ class ListViewAdapter extends CursorAdapter {
             Integer q = cf.getInt(cf.getColumnIndexOrThrow(DbContract.GroceriesEntry.COLUMN_QUANTITY));
             String u = cf.getString(cf.getColumnIndexOrThrow(DbContract.GroceriesEntry.COLUMN_UNIT));
             holder = new ViewHolder(view, cursor.getPosition(), id);
-            holder.name.setText(n);
+            if(q == 0){
+                holder.name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.name.setText(n);
+
+            }else{
+                holder.name.setText(n);
+            }
             holder.quantity.setText(String.valueOf(q));
             holder.unit.setText(u);
             holder.qty = q;
@@ -148,6 +155,7 @@ class ListViewAdapter extends CursorAdapter {
                         break;
 
                     case 0:
+                        holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         break;
 
                     default:
