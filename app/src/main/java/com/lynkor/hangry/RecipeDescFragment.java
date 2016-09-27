@@ -1,6 +1,5 @@
 package com.lynkor.hangry;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.lynkor.hangry.sqliteDB.DbContract;
 
-import java.io.File;
 
 
 public class RecipeDescFragment extends Fragment {
@@ -23,7 +21,6 @@ public class RecipeDescFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflater = inflater;
         View view = inflater.inflate(R.layout.fragment_recipe_desc, container, false);
         details = (LinearLayout) view.findViewById(R.id.fragment_recipedesc_details);
         return view;
@@ -31,24 +28,26 @@ public class RecipeDescFragment extends Fragment {
 
     public void getData(Bundle args){
         // Bundle has all arguments. need to parse through and add child views
-        Log.v("Debuggin", "here");
-        showIngredients(args.getString(DbContract.RecipesEntry.COLUMN_INGREDIENTS));
-        showSteps(args.getString(DbContract.RecipesEntry.COLUMN_STEPS));
+        Log.v("Debuggin", args.getString(DbContract.RecipesEntry.COLUMN_INGREDIENTS));
+
 
         ImageView recipeImage = (ImageView) getActivity().findViewById(R.id.fragment_recipedesc_image);
-        Uri image = Uri.fromFile(new File(args.getString(DbContract.RecipesEntry.COLUMN_IMAGE)));
-        recipeImage.setImageURI(image);
+//        Uri image = Uri.fromFile(new File(args.getString(DbContract.RecipesEntry.COLUMN_IMAGE)));
+//        recipeImage.setImageURI(image);
 
         recipeImage.setImageDrawable(getResources().getDrawable(R.drawable.default_recipe_img));
 
         TextView name = (TextView) getActivity().findViewById(R.id.fragment_recipedesc_name);
         name.setText(args.getString(DbContract.RecipesEntry.COLUMN_NAME));
+
+        showIngredients(args.getString(DbContract.RecipesEntry.COLUMN_INGREDIENTS), args.getString(DbContract.RecipesEntry.COLUMN_STEPS));
     }
 
-    private void showIngredients(String raw){
-        String[] ingredients = raw.substring(0,raw.length()-1).split("&");
+    private void showIngredients(String rawIngredients, String rawSteps){
+        Log.v("inside show: ", rawIngredients);
+        String[] ingredients = rawIngredients.substring(0,rawIngredients.length()-1).split("&");
         String[] ingredient;
-
+        details.removeViews(2,details.getChildCount()-2);
         for(int i = 0; i < ingredients.length; i++){
             View child = getActivity().getLayoutInflater().inflate(R.layout.fragment_recipe_descingredient, details, false);
             TextView name = (TextView) child.findViewById(R.id.fragment_recipedesc_ingredientname);
@@ -65,12 +64,7 @@ public class RecipeDescFragment extends Fragment {
 
         }
 
-
-    }
-
-    private void showSteps(String raw){
-        String[] steps = raw.substring(0,raw.length()-1).split(":");
-
+        String[] steps = rawSteps.substring(0,rawSteps.length()-1).split(":");
         for(int i = 0; i < steps.length; i++){
             View child = getActivity().getLayoutInflater().inflate(R.layout.fragment_recipe_descstep, details, false);
             TextView description = (TextView) child.findViewById(R.id.fragment_recipedesc_step);
@@ -82,5 +76,7 @@ public class RecipeDescFragment extends Fragment {
 
         }
 
+
     }
+
 }

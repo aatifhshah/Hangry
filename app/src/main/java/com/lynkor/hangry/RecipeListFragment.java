@@ -109,33 +109,56 @@ class ListAdapter extends CursorAdapter {
         return cursorInflater.inflate(R.layout.activity_recipes_listitem, viewGroup, false);
     }
 
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView recipe = (TextView) view.findViewById(R.id.recipe_listitem);
-        Button addToMeals = (Button) view.findViewById(R.id.fragment_recipelist_addbutton);
+    private class RecipeHolder{
+        Button add;
+        Button open;
+        Bundle bundle;
+        int position;
 
-        recipe.setText(cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_NAME)));
-        recipe.setOnClickListener(new View.OnClickListener() {
+         RecipeHolder(Bundle b, View view, int cursrpos){
+             add = (Button) view.findViewById(R.id.fragment_recipelist_addbutton);
+             open = (Button) view.findViewById(R.id.fragment_recipelist_item);
+             bundle = b;
+             position = cursrpos;
+        }
+    }
+
+    @Override
+    public void bindView(View view, Context context, final Cursor cursor) {
+        final RecipeHolder args;
+        if(view.getTag() == null){
+            Bundle bundle = new Bundle();
+            bundle.putString(DbContract.RecipesEntry.COLUMN_NAME, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_NAME)));
+            bundle.putString(DbContract.RecipesEntry.COLUMN_IMAGE, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_IMAGE)));
+            bundle.putString(DbContract.RecipesEntry.COLUMN_INGREDIENTS, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_INGREDIENTS)));
+            bundle.putString(DbContract.RecipesEntry.COLUMN_STEPS, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_STEPS)));
+
+            args = new RecipeHolder(bundle,view, cursor.getPosition());
+
+            view.setTag(args);
+        }
+        else{
+            args = (RecipeHolder) view.getTag();
+        }
+
+
+
+        args.open.setText(args.bundle.getString(DbContract.RecipesEntry.COLUMN_NAME));
+        args.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v("hallo", "HALFDKJLSJFIODSFJOISJF");
-                Bundle args = new Bundle();
-                args.putString(DbContract.RecipesEntry.COLUMN_NAME, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_NAME)));
-                args.putString(DbContract.RecipesEntry.COLUMN_IMAGE, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_IMAGE)));
-                args.putString(DbContract.RecipesEntry.COLUMN_INGREDIENTS, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_INGREDIENTS)));
-                args.putString(DbContract.RecipesEntry.COLUMN_STEPS, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_STEPS)));
-                fragCallback.passData(args);
-
+                Log.v("hallo", String.valueOf(args.position));
+                fragCallback.passData(args.bundle);
             }
 
         });
 
-        addToMeals.setOnClickListener(new View.OnClickListener() {
+        args.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //nned to add to groceries here
                 //need to add to meals here
-                String rawIngredients = cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_INGREDIENTS));
+                String rawIngredients = args.bundle.getString(DbContract.RecipesEntry.COLUMN_INGREDIENTS);
                 String [] ingredients = rawIngredients.substring(0,rawIngredients.length()-1).split("&");
 
 
@@ -157,7 +180,7 @@ class ListAdapter extends CursorAdapter {
 
                 //insert recipe name into meal planner
                 ContentValues meal = new ContentValues();
-                meal.put(DbContract.MealsEntry.COLUMN_NAME, cf.getString(cf.getColumnIndexOrThrow(DbContract.RecipesEntry.COLUMN_NAME)));
+                meal.put(DbContract.MealsEntry.COLUMN_NAME, args.bundle.getString(DbContract.RecipesEntry.COLUMN_NAME));
                 db.insert(DbContract.MealsEntry.TABLE_MEALS, null, meal);
 
 
