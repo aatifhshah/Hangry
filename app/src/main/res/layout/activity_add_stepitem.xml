@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/cancel"
             android:scaleType="fitCenter"
-            android:background="@color/white"
+            android:background="@color/transparent"
             android:padding="@dimen/cancel_padding"
             android:layout_weight="1"/>
     </LinearLayout>
