@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -37,6 +38,9 @@ import com.lynkor.hangry.sqliteDB.DbHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.lynkor.hangry.R.drawable.check;
+import static com.lynkor.hangry.R.id.recipe_name;
+
 public class AddActivity extends AppCompatActivity {
     private final String TAG = "AddActivity: ";
     private final String DEBUG_TAG = "YOOOOOOOOOO: ";
@@ -51,6 +55,7 @@ public class AddActivity extends AppCompatActivity {
     private Cursor spinnerCursor;
     private SimpleCursorAdapter spinnerAdapter;
     boolean added;
+    boolean nameIsValid;
 
 
 
@@ -93,6 +98,26 @@ public class AddActivity extends AppCompatActivity {
 
     /*Buttons Handlers*/
     private void setupUI(){
+        //Check for Recipe Name existence
+        EditText recipe_name = (EditText) this.findViewById(R.id.recipe_name);
+        recipe_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                EditText recipe_name = (EditText) view.findViewById(R.id.recipe_name);
+                //query and check if name exists
+
+               if(!recipe_name.getText().toString().equals("")){
+                   Cursor c = db.rawQuery("SELECT name FROM recipes WHERE name = '"+recipe_name.getText().toString()+"'", null);
+                   if(c.getCount()>0 && c!=null) {
+                       recipe_name.setError("Recipe already exists");
+                       nameIsValid = false;
+                   }
+                   else
+                       nameIsValid = true;
+               }
+
+            }
+        });
         //ImageButton for choosing from file
         ImageButton recipeImage = (ImageButton) findViewById(R.id.recipe_image);
         recipeImage.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +262,7 @@ public class AddActivity extends AppCompatActivity {
     public void logRecipe() {
 
         Log.v(TAG, "RECIPE IMAGE PATH: " + selectedImagePath);
-        EditText recipeName = (EditText) this.findViewById(R.id.recipe_name);
+        EditText recipeName = (EditText) this.findViewById(recipe_name);
         String name = recipeName.getText().toString();
         Log.v(TAG, "RECIPE NAME: " + name);
         Log.v(TAG, "RECIPE INGREDIENTS: \n");
@@ -273,7 +298,7 @@ public class AddActivity extends AppCompatActivity {
 
         }
 
-        if( !(recipe_image == null) && !recipe_name.equals("") && !recipe_ingredients.equals("") && !recipe_steps.equals("")){
+        if( !(recipe_image == null) && !recipe_name.equals("") && nameIsValid && !recipe_ingredients.equals("") && !recipe_steps.equals("")){
             recipe.put(DbContract.RecipesEntry.COLUMN_NAME, recipe_name);
             recipe.put(DbContract.RecipesEntry.COLUMN_IMAGE, recipe_image);
             recipe.put(DbContract.RecipesEntry.COLUMN_INGREDIENTS, recipe_ingredients.substring(0,recipe_ingredients.length()-1));
