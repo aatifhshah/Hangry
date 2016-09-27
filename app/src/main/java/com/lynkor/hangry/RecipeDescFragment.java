@@ -1,6 +1,9 @@
 package com.lynkor.hangry;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 
 import com.lynkor.hangry.sqliteDB.DbContract;
 
+import java.io.File;
+import java.io.IOException;
 
 
 public class RecipeDescFragment extends Fragment {
@@ -33,10 +38,15 @@ public class RecipeDescFragment extends Fragment {
 
 
         ImageView recipeImage = (ImageView) getActivity().findViewById(R.id.fragment_recipedesc_image);
-//        Uri image = Uri.fromFile(new File(args.getString(DbContract.RecipesEntry.COLUMN_IMAGE)));
-//        recipeImage.setImageURI(image);
+        Uri image = Uri.fromFile(new File(args.getString(DbContract.RecipesEntry.COLUMN_IMAGE)));
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), image);
+            recipeImage.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+            recipeImage.setImageDrawable(getResources().getDrawable(R.drawable.default_recipe_img));
+        }
 
-        recipeImage.setImageDrawable(getResources().getDrawable(R.drawable.default_recipe_img));
 
         TextView name = (TextView) getActivity().findViewById(R.id.fragment_recipedesc_name);
         name.setText(args.getString(DbContract.RecipesEntry.COLUMN_NAME));
