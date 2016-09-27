@@ -23,6 +23,7 @@ public class RecipeDescFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_desc, container, false);
         details = (LinearLayout) view.findViewById(R.id.fragment_recipedesc_details);
+
         return view;
     }
 

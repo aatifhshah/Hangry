@@ -12,7 +12,7 @@
         />
 
     <ImageButton
-        android:id="@+id/close_groceries"
+        android:id="@+id/activity_recipes_close"
         android:layout_width="match_parent"
         android:padding="13dp"
         android:layout_margin="0dp"
