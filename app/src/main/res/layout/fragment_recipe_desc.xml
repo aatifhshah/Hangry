@@ -1,0 +1,39 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.lynkor.hangry.RecipeDescFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+
+        <LinearLayout
+            android:id="@+id/fragment_recipedesc_details"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/fragment_recipedesc_image"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="200dp"
+                android:padding="15dp"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:id="@+id/fragment_recipedesc_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/light_gray"/>
+
+        </LinearLayout>
+
+
+</ScrollView>

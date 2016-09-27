@@ -36,11 +36,31 @@ public final class DbContract {
                     GroceriesEntry.COLUMN_UNIT + TEXT_TYPE + COMMA_SEP +
                     GroceriesEntry.COLUMN_QUANTITY + INTEGER_TYPE +
                     " )"
+            ,
+            "CREATE TABLE " + MealsEntry.TABLE_MEALS + " (" +
+                    MealsEntry.MEALS_ID + INTEGER_PRIMARY_KEY +
+                    MealsEntry.COLUMN_NAME + TEXT_TYPE +
+                    " )"
+//            ,
+//            "CREATE TABLE " + MealsEntry.TABLE_PLANNER + " (" +
+//                    MealsEntry.PLANNER_ID + INTEGER_PRIMARY_KEY +
+//                    MealsEntry.COLUMN_MONDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_TUESDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_WEDNESDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_THURSDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_FRIDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_SATURDAY + TEXT_TYPE +
+//                    MealsEntry.COLUMN_SUNDAY + TEXT_TYPE +
+//                    " )"
+
     };
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + IngredientsEntry.TABLE_INGREDIENTS + "; " +
                     "DROP TABLE IF EXISTS " + RecipesEntry.TABLE_RECIPES;
+
+    public static final String SQL_DELETE_MEALS =
+            "DROP TABLE IF EXISTS " + MealsEntry.TABLE_MEALS;
 
     public static final String SELECT_COLUMN_NAME_FROM_INGREDIENTS =
             "SELECT "
@@ -78,6 +98,15 @@ public final class DbContract {
                     + " * "
                     + "FROM "
                     + GroceriesEntry.TABLE_GROCERIES;
+
+
+    public static final String SELECT_ALL_FROM_MEALS =
+            "SELECT"
+                    + " * "
+                    + "FROM "
+                    + MealsEntry.TABLE_MEALS;
+
+
 
 
     public static final String SELECT_ROW_FROM_INGREDIENTS =
@@ -128,6 +157,23 @@ public final class DbContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_UNIT = "unit";
         public static final String COLUMN_QUANTITY = "quantity";
+    }
+
+    public static abstract class MealsEntry implements BaseColumns {
+        public static final String TABLE_MEALS = "meals";
+        public static final String MEALS_ID = "_id";
+        public static final String COLUMN_NAME = "name";
+
+
+        static final String TABLE_PLANNER = "planner";
+        static final String PLANNER_ID  = "_id";
+        static final String COLUMN_MONDAY = "monday";
+        static final String COLUMN_TUESDAY= "tuesday";
+        static final String COLUMN_WEDNESDAY= "wednesday";
+        static final String COLUMN_THURSDAY = "thursday";
+        static final String COLUMN_FRIDAY = "friday";
+        static final String COLUMN_SATURDAY = "saturday";
+        static final String COLUMN_SUNDAY= "sunday";
 
 
     }

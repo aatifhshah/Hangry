@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <ImageView
+        android:id="@+id/position"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:padding="@dimen/cancel_padding"
+        android:src="@drawable/bullet"
+        android:gravity="center"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/fragment_recipedesc_ingredientname"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:text="Ingredient"
+        android:padding="6dp"
+        android:textSize="20sp"
+        android:gravity="bottom|end"/>
+
+    <TextView
+        android:id="@+id/fragment_recipedesc_ingredientqty"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center_horizontal"
+        android:padding="6dp"
+        android:textSize="22sp"
+        android:background="@android:color/transparent"
+        android:layout_weight="2"
+        android:hint="@string/enter_quantity"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/fragment_recipedesc_ingredientunit"
+        android:layout_width="0dp"
+        android:text="test"
+        android:gravity="start|bottom"
+        android:padding="6dp"
+        android:textSize="20sp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"/>
+
+
+</LinearLayout>

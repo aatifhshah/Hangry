@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,8 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //TODO open pop-up window with the app information, such as author’s name, software version number, URL link for help, copyright information, will be shown.
                 LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = layoutInflater.inflate(R.layout.activity_banner, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 Button btnDismiss = (Button)popupView.findViewById(R.id.dismiss);
+                TextView github = (TextView) popupView.findViewById(R.id.github_link);
+
+                github.setText( Html.fromHtml("<a href=\"https://github.com/laviathor/Hangry\">Check it out on GitHub</a>"));
+                github.setMovementMethod(LinkMovementMethod.getInstance());
                 //dim main activity
                 layout_main.getForeground().setAlpha(200);
                 btnDismiss.setOnClickListener(new Button.OnClickListener(){

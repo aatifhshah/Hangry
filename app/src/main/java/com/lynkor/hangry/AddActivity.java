@@ -41,8 +41,6 @@ public class AddActivity extends AppCompatActivity {
     private final String TAG = "AddActivity: ";
     private final String DEBUG_TAG = "YOOOOOOOOOO: ";
 
-    private ListView ingredientsListView;
-    private ListView stepsListView;
     private ListAdapter ingredientsAdapter;
     private ListAdapter stepsAdapter;
     private ArrayList<String> recipeIngredients;
@@ -63,33 +61,38 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
         stepsList = new ArrayList<>();
         recipeIngredients = new ArrayList<>();
+        loadCursor();
+        setupLists();
+        setupUI();
+    }
 
-
-        /*Load Cursor*/
-
+    /*Load Cursor*/
+    private void loadCursor(){
         //DbHelper is an SQLiteOpenHelper class connecting to the underlying Database
         DbHelper handler = DbHelper.getInstance(this);
         //Get access to the underlying writable database
         db = handler.getWritableDatabase();
         checkCursor();
+    }
 
 
-
-         /*Attach List adapters to views*/
-
+    /*Attach List adapters to views*/
+    private void setupLists(){
         //Find ListView and set adapter for Ingredients
-        ingredientsListView = (ListView) findViewById(R.id.ingredients_list);
+        ListView ingredientsListView = (ListView) findViewById(R.id.ingredients_list);
         //Add hint to spinner list
         ingredientsAdapter = new ListAdapter(this, recipeIngredients, R.layout.activity_add_listitem, "ingredients");
         ingredientsListView.setAdapter(ingredientsAdapter);
 
         //Find ListView and set adapter for Steps
-        stepsListView = (ListView) findViewById(R.id.steps_list);
+        ListView stepsListView = (ListView) findViewById(R.id.steps_list);
         stepsAdapter = new ListAdapter(this, stepsList, R.layout.activity_add_stepitem, "steps");
         stepsListView.setAdapter(stepsAdapter);
+    }
 
-        /*Buttons Handlers*/
 
+    /*Buttons Handlers*/
+    private void setupUI(){
         //ImageButton for choosing from file
         ImageButton recipeImage = (ImageButton) findViewById(R.id.recipe_image);
         recipeImage.setOnClickListener(new View.OnClickListener() {
@@ -160,11 +163,13 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 added = postRecipe();
-                finish();
+
+                if(added)
+                    finish();
             }
         });
-
     }
+
 
     @Override
     protected void onStop(){
@@ -173,13 +178,13 @@ public class AddActivity extends AppCompatActivity {
         super.onStop();
     }
 
+
     private void addNew(String name, String unit) {
         ContentValues entry = new ContentValues();
         entry.put(DbContract.IngredientsEntry.COLUMN_NAME, name);
         entry.put(DbContract.IngredientsEntry.COLUMN_UNIT, unit);
 
         db.insert(DbContract.IngredientsEntry.TABLE_INGREDIENTS, null, entry);
-
     }
 
 
@@ -205,6 +210,7 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
+
     private void setupCursor() {
         //Add Hint and New Ingredient
         ContentValues spinnerHint = new ContentValues();
@@ -216,17 +222,13 @@ public class AddActivity extends AppCompatActivity {
 
         db.insertOrThrow(DbContract.IngredientsEntry.TABLE_INGREDIENTS, null, spinnerHint);
         db.insertOrThrow(DbContract.IngredientsEntry.TABLE_INGREDIENTS, null, addNew);
-
-
     }
 
 
     public String getUnitType(int id) {
-
         Cursor cursor = db.query(DbContract.IngredientsEntry.TABLE_INGREDIENTS, new String[]{DbContract.IngredientsEntry.COLUMN_UNIT}, DbContract.IngredientsEntry.ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-
         String unit = cursor.getString(0);
         // return contact
         return unit;
@@ -239,8 +241,6 @@ public class AddActivity extends AppCompatActivity {
         String name = recipeName.getText().toString();
         Log.v(TAG, "RECIPE NAME: " + name);
         Log.v(TAG, "RECIPE INGREDIENTS: \n");
-
-
     }
 
     public boolean postRecipe(){
@@ -258,8 +258,6 @@ public class AddActivity extends AppCompatActivity {
         //build Recipe Steps. *FORMAT step:step:..
         String recipe_steps = "";
 
-
-
         for(int i=0; i<ingredientsAdapter._quantity.size(); i++ ){
             String name = ingredientsAdapter._spinner_value.get(i);
             String quantity = ingredientsAdapter._quantity.get(i);
@@ -267,12 +265,6 @@ public class AddActivity extends AppCompatActivity {
             String step = stepsAdapter.savedStepText.get(i);
 
             if(!(name.equals(DbContract.IngredientsEntry.spinner_hint) || name.equals(DbContract.IngredientsEntry.new_ingredient)) && quantity.length()>0){
-                /*ContentValues grocery = new ContentValues();
-                grocery.put(DbContract.GroceriesEntry.COLUMN_NAME, name);
-                grocery.put(DbContract.GroceriesEntry.COLUMN_QUANTITY, quantity);
-                grocery.put(DbContract.GroceriesEntry.COLUMN_UNIT, unit);
-                groceries.add(grocery);*/
-
                 recipe_ingredients += name+":"+quantity+":"+unit+"&";
             }
 
@@ -281,8 +273,7 @@ public class AddActivity extends AppCompatActivity {
 
         }
 
-
-        if( !recipe_name.equals("") && !recipe_ingredients.equals("") && !recipe_steps.equals("")){
+        if( !(recipe_image == null) && !recipe_name.equals("") && !recipe_ingredients.equals("") && !recipe_steps.equals("")){
             recipe.put(DbContract.RecipesEntry.COLUMN_NAME, recipe_name);
             recipe.put(DbContract.RecipesEntry.COLUMN_IMAGE, recipe_image);
             recipe.put(DbContract.RecipesEntry.COLUMN_INGREDIENTS, recipe_ingredients.substring(0,recipe_ingredients.length()-1));
@@ -553,94 +544,6 @@ public class AddActivity extends AppCompatActivity {
 
 }
 
-
-// TODO Use later with RelativeLayout
-/*class NonScrollListView extends ListView {
-
-    public NonScrollListView(Context context) {
-        super(context);
-    }
-    public NonScrollListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-    public NonScrollListView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int heightMeasureSpec_custom = MeasureSpec.makeMeasureSpec(
-                Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec_custom);
-        ViewGroup.LayoutParams params = getLayoutParams();
-        params.height = getMeasuredHeight();
-    }
-}*/
-
-
-//TODO maybe
-/*// Adapter for Ingredients
-class customAdapter extends CursorAdapter{
-
-    public customAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
-    }
-
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        return LayoutInflater.from(context).inflate(R.layout.activity_add_listitem, viewGroup, false);
-    }
-
-    @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
-        Spinner spinner = (Spinner) view.findViewById(R.id.choose_ingredient);
-        ArrayList<String> spinnerValues = cursorToArrayListString(ingredientsCursor);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, spinnerValues);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
-
-            *//*Set onClickListener for spinner*//*
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                //Toast.makeText(parent.getContext(), "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString() + ", id: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
-
-                //New Ingredient
-                if(id == 1){
-                    View dialogLayout = LayoutInflater.from(context).inflate(R.layout.activity_add_new_ingredient_popover, null);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this);
-                    builder.setTitle("New Ingredient");
-                    builder.setView(dialogLayout);
-                    builder.show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return super.getView(position, convertView, parent);
-    }
-
-    private ArrayList<String> cursorToArrayListString(Cursor c){
-        ArrayList<String> a = new ArrayList<>();
-        if(c != null && c.getCount() > 0){
-            do {
-                String id  = c.getString(c.getColumnIndexOrThrow(DbContract.IngredientsEntry.ID));
-                String name  = c.getString(c.getColumnIndexOrThrow(DbContract.IngredientsEntry.COLUMN_NAME));
-                String unit  = c.getString(c.getColumnIndexOrThrow(DbContract.IngredientsEntry.COLUMN_UNIT));
-
-                String row = id + ":" + name + ":" +unit;
-                a.add(row);
-            } while (c.moveToNext());
-        }
-        return a;
-    }
-}*/
 
 
 

@@ -49,29 +49,31 @@ public class GroceriesActivity extends AppCompatActivity {
 
     private void setListViewAdapter() {
         cursorAdapter = new ListViewAdapter(this, groceryCursor, 0, db);
-        //cursorAdapter = new ListViewAdapter(this, R.layout.activity_groceries_listitem, )
         listView.setAdapter(cursorAdapter);
-
-
-
     }
 
     public void updateAdapter() {
         cursorAdapter.notifyDataSetChanged();
     }
 
-    public void getGroceries(){
+    private void getGroceries(){
         DbHelper handler = DbHelper.getInstance(this);
         db = handler.getWritableDatabase();
         //get cursor
         groceryCursor = db.rawQuery(DbContract.SELECT_ALL_FROM_GROCERIES, null);
     }
 
+    @Override
+    protected void onDestroy() {
+        db.close();
+        super.onDestroy();
+    }
+
 
 }
 
 class ListViewAdapter extends CursorAdapter {
-    Cursor cf;
+    private Cursor cf;
     private LayoutInflater cursorInflater;
     private SQLiteDatabase db;
     private GroceriesActivity activity;
@@ -130,8 +132,6 @@ class ListViewAdapter extends CursorAdapter {
                         break;
                 }
 
-                //update/swap cursor
-                activity.updateAdapter();
             }
         });
 
@@ -156,10 +156,6 @@ class ListViewAdapter extends CursorAdapter {
                         holder.qty = holder.qty - 1;
 
                 }
-
-
-                //update/swap cursor
-                activity.updateAdapter();
             }
         });
 
